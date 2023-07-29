@@ -5,7 +5,14 @@ export default (schemaName, Schema) => {
   return {
     getAll: async (req, res) => {
       try {
-        const items = await Schema.find();
+        const searchParams = Object.keys(Schema.schema.obj).reduce(
+          (acc, key) =>
+            req.query[key] ? { ...acc, [key]: req.query[key] } : acc,
+          {}
+        );
+
+        const items = await Schema.find(searchParams);
+
         handleSuccess(res, items);
       } catch {
         handleFailure(res, {

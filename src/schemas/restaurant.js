@@ -5,7 +5,7 @@ const restaurantSchema = new mongoose.Schema({
   name: String,
   address: String,
   phone: String,
-  amountClients: Number,
+  clientsAmount: Number,
 });
 
 const Restaurant = mongoose.model('Restaurant', restaurantSchema);
