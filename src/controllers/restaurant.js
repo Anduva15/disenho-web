@@ -1,4 +1,4 @@
 import Restaurant from '../schemas/restaurant.js';
 import baseCRUD from './baseCRUD.js';
 
-export default baseCRUD('restaurant.js', Restaurant);
+export default baseCRUD('restaurant', Restaurant);
