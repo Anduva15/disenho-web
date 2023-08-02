@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import measurementUnit from '../controllers/measurementUnit.js'
+import measurementUnit from '../controllers/measurementUnit.js';
 
 const router = Router();
 const baseUrl = '/measurementUnit';

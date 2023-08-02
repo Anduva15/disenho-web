@@ -10,9 +10,9 @@ const accountSchema = new mongoose.Schema({
   reservationId: String,
   bar: Boolean,
   restaurantId: String,
-  status: String
+  status: String,
 });
 
-const Account = mongoose.model('accounts', accountSchema);
+const Account = mongoose.model('account', accountSchema);
 
 export default Account;

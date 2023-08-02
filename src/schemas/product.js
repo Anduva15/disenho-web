@@ -17,8 +17,8 @@ const productSchema = new mongoose.Schema({
   quantity: Number,
   nationality: String,
   restaurantId: Array,
-  provedorId: Array,
-  marcaId: String
+  providerId: Array,
+  brandId: String,
 });
 
 const Product = mongoose.model('product', productSchema);

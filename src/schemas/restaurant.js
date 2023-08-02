@@ -8,6 +8,6 @@ const restaurantSchema = new mongoose.Schema({
   clientsAmount: Number,
 });
 
-const Restaurant = mongoose.model('restaurants', restaurantSchema);
+const Restaurant = mongoose.model('restaurant', restaurantSchema);
 
 export default Restaurant;

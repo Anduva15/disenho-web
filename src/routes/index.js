@@ -1,0 +1,16 @@
+export { default as accountRouter } from './account.js';
+export { default as brandRouter } from './brand.js';
+export { default as cashierRouter } from './cashier.js';
+export { default as clientRouter } from './client.js';
+export { default as countryRouter } from './country.js';
+export { default as employeeRouter } from './employee.js';
+export { default as measurementUnitRouter } from './measurementUnit.js';
+export { default as positionRouter } from './position.js';
+export { default as productRouter } from './product.js';
+export { default as providerRouter } from './provider.js';
+export { default as reportRouter } from './report.js';
+export { default as reservationRouter } from './reservation.js';
+export { default as restaurantRouter } from './restaurant.js';
+export { default as roleRouter } from './role.js';
+export { default as tableRouter } from './table.js';
+export { default as userRouter } from './user.js';
