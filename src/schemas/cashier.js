@@ -1,4 +1,8 @@
 import mongoose from 'mongoose';
+import autoIncrement from 'mongoose-auto-increment';
+
+const model = 'cashier';
+autoIncrement.initialize(mongoose.connection);
 
 const cashierSchema = new mongoose.Schema({
   id: String,
@@ -11,6 +15,13 @@ const cashierSchema = new mongoose.Schema({
   restaurantId: String,
 });
 
-const Cashier = mongoose.model('cashier', cashierSchema);
+cashierSchema.plugin(autoIncrement.plugin, {
+  model,
+  field: 'id',
+  startAt: 1,
+  incrementBy: 1,
+});
+
+const Cashier = mongoose.model(model, cashierSchema);
 
 export default Cashier;

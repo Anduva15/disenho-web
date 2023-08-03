@@ -5,13 +5,13 @@ export default (schemaName, Schema) => {
   return {
     getAll: async (req, res) => {
       try {
-        const searchParams = Object.keys(Schema.schema.obj).reduce(
+        const findParams = Object.keys(Schema.schema.obj).reduce(
           (acc, key) =>
             req.query[key] ? { ...acc, [key]: req.query[key] } : acc,
           {}
         );
 
-        const items = await Schema.find(searchParams);
+        const items = await Schema.find(findParams);
 
         handleSuccess(res, items);
       } catch {
@@ -22,10 +22,9 @@ export default (schemaName, Schema) => {
     },
     get: async (req, res) => {
       try {
-        const _id = req.params.id;
-        const item = await Schema.findOne({ _id });
-
-        // add 404
+        const id = req.params.id;
+        const findParams = isNaN(id) ? { _id: id } : { id };
+        const item = await Schema.findOne(findParams);
 
         handleSuccess(res, item);
       } catch {

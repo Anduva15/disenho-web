@@ -1,4 +1,8 @@
 import mongoose from 'mongoose';
+import autoIncrement from 'mongoose-auto-increment';
+
+const model = 'provider';
+autoIncrement.initialize(mongoose.connection);
 
 const providerSchema = new mongoose.Schema({
   id: String,
@@ -13,6 +17,13 @@ const providerSchema = new mongoose.Schema({
   brands: Array,
 });
 
-const Provider = mongoose.model('provider', providerSchema);
+providerSchema.plugin(autoIncrement.plugin, {
+  model,
+  field: 'id',
+  startAt: 1,
+  incrementBy: 1,
+});
+
+const Provider = mongoose.model(model, providerSchema);
 
 export default Provider;

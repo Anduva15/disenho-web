@@ -1,4 +1,8 @@
 import mongoose from 'mongoose';
+import autoIncrement from 'mongoose-auto-increment';
+
+const model = 'client';
+autoIncrement.initialize(mongoose.connection);
 
 const clientSchema = new mongoose.Schema({
   id: String,
@@ -8,9 +12,16 @@ const clientSchema = new mongoose.Schema({
   productsPrice: Array,
   restaurantId: String,
   status: String,
-  name: String
+  name: String,
 });
 
-const Client = mongoose.model('client', clientSchema);
+clientSchema.plugin(autoIncrement.plugin, {
+  model,
+  field: 'id',
+  startAt: 1,
+  incrementBy: 1,
+});
+
+const Client = mongoose.model(model, clientSchema);
 
 export default Client;

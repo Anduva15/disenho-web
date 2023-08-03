@@ -1,4 +1,8 @@
 import mongoose from 'mongoose';
+import autoIncrement from 'mongoose-auto-increment';
+
+const model = 'employee';
+autoIncrement.initialize(mongoose.connection);
 
 const employeeSchema = new mongoose.Schema({
   id: String,
@@ -12,6 +16,13 @@ const employeeSchema = new mongoose.Schema({
   positionId: String,
 });
 
-const Employee = mongoose.model('employee', employeeSchema);
+employeeSchema.plugin(autoIncrement.plugin, {
+  model,
+  field: 'id',
+  startAt: 1,
+  incrementBy: 1,
+});
+
+const Employee = mongoose.model(model, employeeSchema);
 
 export default Employee;

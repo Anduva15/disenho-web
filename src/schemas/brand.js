@@ -1,4 +1,8 @@
 import mongoose from 'mongoose';
+import autoIncrement from 'mongoose-auto-increment';
+
+const model = 'brand';
+autoIncrement.initialize(mongoose.connection);
 
 const brandSchema = new mongoose.Schema({
   id: String,
@@ -9,6 +13,13 @@ const brandSchema = new mongoose.Schema({
   phoneNumber: String,
 });
 
-const Brand = mongoose.model('brand', brandSchema);
+brandSchema.plugin(autoIncrement.plugin, {
+  model,
+  field: 'id',
+  startAt: 1,
+  incrementBy: 1,
+});
+
+const Brand = mongoose.model(model, brandSchema);
 
 export default Brand;
