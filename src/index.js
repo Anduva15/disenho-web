@@ -5,7 +5,7 @@ import cors from 'cors';
 import * as routes from './routes/index.js';
 
 const port = 8085;
-
+mongoose.set('strictQuery', false);
 const start = () => {
   try {
     mongoose.connect('mongodb://localhost:27017/restaurante').then(() => {
