@@ -2,6 +2,8 @@ export default (schemaName, Schema) => {
   const handleSuccess = (res, message) => res.status(200).json(message);
   const handleFailure = (res, message) => res.status(500).json(message);
 
+  app.use()
+
   return {
     getAll: async (req, res) => {
       try {
@@ -18,6 +20,8 @@ export default (schemaName, Schema) => {
         handleFailure(res, {
           error: `Error obteniendo todo los ${schemaName}`,
         });
+        
+        console.error('Error en el proceso de obtención');
       }
     },
     get: async (req, res) => {
@@ -31,6 +35,8 @@ export default (schemaName, Schema) => {
         handleFailure(res, {
           error: `Error: El ${_id} no existe en ${schemaName}`,
         });
+
+        console.error('Usuario no encontrado');
       }
     },
     create: (req, res) => {
@@ -41,7 +47,7 @@ export default (schemaName, Schema) => {
       }
       newItem.save(e => {
         if (e) {
-          console.error(e);
+          console.error('Error en la creación del usuario');
           handleFailure(res, { error: `'Error creando ${schemaName}'` });
         } else {
           handleSuccess(res, newItem);
@@ -64,7 +70,10 @@ export default (schemaName, Schema) => {
 
         handleSuccess(res, item);
       } catch {
-        handleSuccess(res, { error: `${schemaName} con id ${_id}, no existe` });
+        handleSuccess(res, { error: `${schemaName} con id ${_id}, no existe` 
+        });
+
+        console.error('Error durante el proceso de carga');
       }
     },
     delete: async (req, res) => {
@@ -76,6 +85,7 @@ export default (schemaName, Schema) => {
         handleSuccess(res, { success: 'Exito al borrar' });
       } catch {
         handleSuccess(res, { error: `${schemaName} con id ${_id}, no existe` });
+        console.error('Error al eliminar el usuario');
       }
     },
   };
