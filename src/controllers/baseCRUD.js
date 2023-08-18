@@ -36,7 +36,9 @@ export default (schemaName, Schema) => {
     create: (req, res) => {
       const item = req.body;
       const newItem = new Schema(item);
-
+      if (Schema = "User") {
+        newItem.setPassword(item.password)
+      }
       newItem.save(e => {
         if (e) {
           console.error(e);
