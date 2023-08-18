@@ -25,7 +25,7 @@ app.use((err, req, res, next) => {
 
 
 const port = 8085;
-
+mongoose.set('strictQuery', false);
 const start = () => {
   try {
     mongoose.connect('mongodb://localhost:27017/restaurante').then(() => {

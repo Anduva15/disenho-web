@@ -5,9 +5,9 @@ const model = 'user';
 autoIncrement.initialize(mongoose.connection);
 
 const userSchema = new mongoose.Schema({
-  id: String,
+  id: Number,
   name: String,
-  fistName: String,
+  firstName: String,
   lastName: String,
   employeeId: String,
   phoneNumber1: String,
