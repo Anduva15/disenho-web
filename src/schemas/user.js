@@ -25,6 +25,9 @@ userSchema.plugin(autoIncrement.plugin, {
   incrementBy: 1,
 });
 
+userSchema.statics.findOneByUsername = function(login) {
+  return this.findOne({ login });
+};
 
 const User = mongoose.model(model, userSchema);
 

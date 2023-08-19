@@ -1,7 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-
+import login from './routes/login.js'
 import * as routes from './routes/index.js';
 
 
@@ -14,6 +14,7 @@ const start = () => {
       const app = express();
       app.use(cors());
       app.use(express.json());
+      app.use(login)
       Object.keys(routes).forEach(routeKey => {
         app.use(routes[routeKey]);
       });

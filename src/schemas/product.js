@@ -5,7 +5,6 @@ const model = 'product';
 autoIncrement.initialize(mongoose.connection);
 
 const productSchema = new mongoose.Schema({
-  id: String,
   name: String,
   description: String,
   category: String,
