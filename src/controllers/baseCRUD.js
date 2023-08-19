@@ -2,7 +2,7 @@ export default (schemaName, Schema) => {
   const handleSuccess = (res, message) => res.status(200).json(message);
   const handleFailure = (res, message) => res.status(500).json(message);
 
-  app.use()
+
 
   return {
     getAll: async (req, res) => {
@@ -42,12 +42,11 @@ export default (schemaName, Schema) => {
     create: (req, res) => {
       const item = req.body;
       const newItem = new Schema(item);
-      if (Schema = "User") {
-        newItem.setPassword(item.password)
-      }
+     
       newItem.save(e => {
         if (e) {
           console.error('Error en la creación del usuario');
+          console.log(e)
           handleFailure(res, { error: `'Error creando ${schemaName}'` });
         } else {
           handleSuccess(res, newItem);
