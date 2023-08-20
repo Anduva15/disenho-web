@@ -14,23 +14,38 @@ export default (schemaName, Schema) => {
         );
 
         const items = await Schema.find(findParams);
-
-        handleSuccess(res, items);
+        if (schemaName === "users")
+        {
+          const itemsWithoutPassword = items.map(item => 
+          {
+            const {password, ...itemWithoutPassword } = item.toObject();
+            return itemWithoutPassword;
+          });
+          handleSuccess(res, itemsWithoutPassword);
+        } else {
+          handleSuccess(res, items);
+        }
       } catch {
         handleFailure(res, {
-          error: `Error obteniendo todo los ${schemaName}`,
+          error: `Error obteniendo todo los ${schemaName}`,                         
         });
         
         console.error('Error en el proceso de obtención');
       }
     },
     get: async (req, res) => {
-      try {
+      try 
+      {
         const id = req.params.id;
         const findParams = isNaN(id) ? { _id: id } : { id };
         const item = await Schema.findOne(findParams);
-
-        handleSuccess(res, item);
+        
+        if(schemaName === "users"){
+          const { password, ...itemWithoutPassword } = item.toObject();
+          handleSuccess(res, itemWithoutPassword);
+        } else {
+          handleSuccess(res, item);
+        }
       } catch {
         handleFailure(res, {
           error: `Error: El ${_id} no existe en ${schemaName}`,
