@@ -1,27 +1,29 @@
-export default (schemaName, Schema) => {
-  const handleSuccess = (res, message) => res.status(200).json(message);
-  //const handleFailure = (res, message) => res.status(500).json(message);
+import _ from 'lodash';
 
-  //app.use()
+export default (schemaName, Schema, omitPassword) => {
+  const handleSuccess = (res, message) => res.status(200).json(message);
+  const handleFailure = (res, message) => res.status(500).json(message);
+  const handleNotFound = (res, message) => res.status(404).json(message);
 
   return {
     getAll: async (req, res) => {
       try {
-        const findParams = Object.keys(Schema.schema.obj).reduce(
-          (acc, key) =>
-            req.query[key] ? { ...acc, [key]: req.query[key] } : acc,
-          {}
-        );
+        const findParams = Object.keys(Schema.schema.obj).reduce((acc, key) => {
+          if (req.query[key]) {
+            return { ...acc, [key]: { $regex: req.query[key], $options: 'i' } };
+          }
+          return acc;
+        }, {});
+
         const items = await Schema.find(findParams);
-        handleSuccess(res, items);
-      } 
-      catch {
-        //handleFailure(res, {error: `Error obteniendo todo los ${schemaName}`});*/
-        res.status(500).json({ error: 'Invalid credentials' });
+        return handleSuccess(res, items);
+      } catch (e) {
+        console.error(e);
+        return handleFailure(res, {
+          error: `Error obteniendo todos los ${schemaName}s`,
+        });
       }
     },
-
-
 
     get: async (req, res) => {
       try {
@@ -29,48 +31,51 @@ export default (schemaName, Schema) => {
         const findParams = isNaN(id) ? { _id: id } : { id };
         const item = await Schema.findOne(findParams);
 
-        handleSuccess(res, item);
-      } catch {
-        res.status(500).json({error: 'Failed process' });
-        console.error('Proceso fallido');
+        if (!item) {
+          return handleNotFound(res, {
+            error: `Id de ${schemaName} no encontrado`,
+          });
+        }
+
+        return handleSuccess(res, item);
+      } catch (e) {
+        console.error(e);
+        return handleFailure(res, { error: `Error obteniendo ${schemaName}` });
       }
     },
-
-
 
     create: (req, res) => {
       const item = req.body;
       const newItem = new Schema(item);
 
-      try{
+      try {
         newItem.save(e => {
           if (e) {
-            console.error('Error en la creación del usuario');
-            res.status(500).json({ error: `'Error creando ${schemaName}'` });
+            console.error(e);
+            handleFailure(res, { error: `Error creando ${schemaName}` });
           } else {
             handleSuccess(res, newItem);
           }
         });
+      } catch (e) {
+        console.error(e);
+        handleFailure(res, { error: `Error creando ${schemaName}` });
       }
-      catch{
-        res.status(500).json({error: 'Failed process' });
-        console.error('Proceso fallido');
-      }
-
-      
     },
-    
-    
-    
-    update: async (req, res) => {
-      const _id = req.params.id;
-      const bodyId = req.body._id;
-      
-      try {
-        const item = await Schema.findOne({ _id });
 
-        if (bodyId && bodyId !== _id) {// validate if para with body id
-          return res.status(400).json({ error: 'usuario no valido' });
+    update: async (req, res) => {
+      const id = req.params.id;
+      const bodyId = req.body.id;
+
+      try {
+        const findParams = isNaN(id) ? { _id: id } : { id };
+        const item = await Schema.findOne(findParams);
+
+        if (bodyId && bodyId != id) {
+          // validate if para with body id
+          return handleNotFound(res, {
+            error: `Id de ${schemaName} no encontrado`,
+          });
         }
 
         Object.keys(req.body).forEach(key => {
@@ -79,42 +84,28 @@ export default (schemaName, Schema) => {
 
         await item.save();
         handleSuccess(res, item);
-        res.status(200).json({message: 'Proceso exitso' });
-      } 
-      catch {
-        //handleSuccess(res, { error: `${schemaName} con id ${_id}, no existe`});
-        res.status(404).json({error: 'Invalid credentials' });// add 404
+      } catch (e) {
+        handleFailure(res, { error: `Error actualizando ${schemaName}, ${e}` });
       }
     },
 
-
-
     delete: async (req, res) => {
-      const _id = req.params.id;
-      const bodyId = req.body._id;
+      const id = req.params.id;
+      const findParams = isNaN(id) ? { _id: id } : { id };
 
-      try{
-        if (bodyId && bodyId !== _id) {// validate if para with body id
-          return res.status(400).json({ error: 'usuario no valido' });
-        }
-  
-        try {
-          await Schema.deleteOne({ _id });
-          res.status(200).json({message: '' });
-          handleSuccess(res, { success: 'Exito al borrar' });
-        } 
-        catch {
-          handleSuccess(res, { error: `${schemaName} con id ${_id}, no existe` });
-          console.error('Error al eliminar el usuario');
-          return res.status(400).json({ error: 'usuario no valido' });
-        }
-      }
-      catch{
-        console.error('Error en el proceso');
-        return res.status(500).json({ error: 'Error en el proceso' });
-      }
+      try {
+        const transaction = await Schema.deleteOne(findParams);
 
-      
+        if (transaction.deletedCount <= 0) {
+          return handleNotFound(res, `Id de ${schemaName} no encontrado`);
+        }
+
+        handleSuccess(res, { success: `Exito al borrar ${schemaName}` });
+      } catch (e) {
+        handleFailure(res, {
+          error: `Error borrando ${schemaName} con id ${id}`,
+        });
+      }
     },
   };
 };
