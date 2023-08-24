@@ -1,4 +1,3 @@
-import _ from 'lodash';
 
 export default (schemaName, Schema, omitPassword) => {
   const handleSuccess = (res, message) => res.status(200).json(message);
