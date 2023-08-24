@@ -14,3 +14,4 @@ export { default as restaurantRouter } from './restaurant.js';
 export { default as roleRouter } from './role.js';
 export { default as tableRouter } from './table.js';
 export { default as userRouter } from './user.js';
+export { default as billRouter } from './bill.js';
