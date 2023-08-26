@@ -22,6 +22,11 @@ clientSchema.plugin(autoIncrement.plugin, {
   incrementBy: 1,
 });
 
+clientSchema.set('timestamps', {
+  createdAt: 'crdAt',
+  updatedAt: 'updAt',
+});
+
 const Client = mongoose.model(model, clientSchema);
 
 export default Client;
